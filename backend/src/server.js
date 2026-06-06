@@ -38,6 +38,12 @@ app.use(cors({
       return;
     }
     
+    // In production, be strict. In development, allow any https origin
+    if (process.env.NODE_ENV === 'development') {
+      callback(null, true);
+      return;
+    }
+    
     // Log rejected origins for debugging
     console.warn(`CORS rejected origin: ${origin}`);
     callback(new Error('Not allowed by CORS'));
