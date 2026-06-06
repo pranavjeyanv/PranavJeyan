@@ -20,13 +20,31 @@ const allowedOrigins = [
 
 app.use(cors({
   origin: (origin, callback) => {
-    if (!origin || origin.startsWith('http://localhost:') || allowedOrigins.includes(origin)) {
+    // Allow no origin (mobile apps, requests without Origin header)
+    if (!origin) {
       callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
+      return;
     }
+    
+    // Allow localhost
+    if (origin.startsWith('http://localhost:')) {
+      callback(null, true);
+      return;
+    }
+    
+    // Allow specified origins
+    if (allowedOrigins.includes(origin)) {
+      callback(null, true);
+      return;
+    }
+    
+    // Log rejected origins for debugging
+    console.warn(`CORS rejected origin: ${origin}`);
+    callback(new Error('Not allowed by CORS'));
   },
   credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
 }));
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
