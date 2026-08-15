@@ -45,28 +45,6 @@ const SecurityArsenal = () => {
           <p className="text-cyan-400 text-lg">Tools and technologies for cybersecurity operations</p>
         </motion.div>
 
-        {/* Category filter */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          transition={{ duration: 0.5 }}
-          viewport={{ once: true }}
-          className="mb-12 flex flex-wrap gap-3"
-        >
-          {categories.map((category) => (
-            <button
-              key={category}
-              onClick={() => setFilterCategory(category)}
-              className={`px-4 py-2 rounded-full transition-all duration-300 font-medium ${
-                filterCategory === category
-                  ? 'bg-gradient-to-r from-cyan-500 to-blue-500 text-white shadow-lg shadow-cyan-500/50'
-                  : 'border border-cyan-400/30 text-cyan-400 hover:border-cyan-400/60 bg-cyan-500/5'
-              }`}
-            >
-              {category}
-            </button>
-          ))}
-        </motion.div>
 
         {/* Tools grid */}
         <motion.div
