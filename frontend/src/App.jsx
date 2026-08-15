@@ -13,6 +13,7 @@ const App = () => {
 
   return (
     <>
+      <h1>Cybersecurity Engineer & Ethical Hacker</h1>
       <ScrollProgress />
       <Navbar />
       <HomePage />
