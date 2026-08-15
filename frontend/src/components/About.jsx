@@ -1,40 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { motion } from 'framer-motion';
-import { aboutAPI, experienceAPI } from '../services/api.js';
+import { Terminal as TerminalIcon, ShieldAlert, Zap, Target } from 'lucide-react';
+import Terminal from './Terminal';
 
 const About = () => {
-  const [about, setAbout] = useState(null);
-  const [experiences, setExperiences] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const [aboutRes, expRes] = await Promise.all([
-          aboutAPI.getAbout(),
-          experienceAPI.getExperiences(),
-        ]);
-        if (aboutRes.data.data) {
-          setAbout(aboutRes.data.data);
-        }
-        if (expRes.data.data) {
-          setExperiences(expRes.data.data);
-        }
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, []);
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.2,
+        staggerChildren: 0.15,
       },
     },
   };
@@ -48,98 +23,115 @@ const About = () => {
     },
   };
 
+  const highlights = [
+    {
+      icon: ShieldAlert,
+      title: 'SOC Operations',
+      description: 'Expert in security alert monitoring, incident response, and threat analysis',
+    },
+    {
+      icon: Target,
+      title: 'Penetration Testing',
+      description: 'Comprehensive vulnerability assessment and security testing methodologies',
+    },
+    {
+      icon: TerminalIcon,
+      title: 'Security Research',
+      description: 'Active bug bounty hunter and vulnerability researcher on CyberComOlho',
+    },
+    {
+      icon: Zap,
+      title: 'Threat Intelligence',
+      description: 'MITRE ATT&CK framework correlation and threat pattern analysis',
+    },
+  ];
+
   return (
-    <section id="about" className="py-20 px-4 bg-dark-light/30">
+    <section id="about" className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-[#1a1f3a] to-[#0a0e27]">
       <div className="max-w-6xl mx-auto">
         <motion.div
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true, margin: '-100px' }}
+          viewport={{ once: true }}
         >
           {/* Section Title */}
-          <motion.div variants={itemVariants} className="text-center mb-12">
-            <h2 className="text-4xl md:text-5xl font-bold mb-4">
-              About <span className="gradient-text">Me</span>
-            </h2>
-            <p className="text-gray-400 text-lg max-w-2xl mx-auto">
-              {about?.summary || 'Dynamic Full Stack Developer with expertise in modern web technologies'}
-            </p>
+          <motion.div variants={itemVariants} className="mb-16">
+            <h2 className="text-4xl sm:text-5xl font-bold text-white mb-4">About Me</h2>
+            <p className="text-cyan-400 text-lg">Cybersecurity professional with hands-on SOC, penetration testing, and research expertise</p>
           </motion.div>
 
-          {loading ? (
-            <div className="text-center py-12 text-gray-400">Loading...</div>
-          ) : about ? (
-            <>
-          {/* Content */}
-          <div className="grid md:grid-cols-2 gap-12">
-            {/* Left side - Text */}
+          {/* Main content grid */}
+          <div className="grid lg:grid-cols-2 gap-12 items-start mb-16">
+            {/* Left side - Professional Summary */}
             <motion.div variants={itemVariants} className="space-y-6">
-              <div className="glass rounded-xl p-6">
-                <h3 className="text-2xl font-bold text-white mb-4">{about.name}</h3>
-                <p className="text-gray-300 mb-4">
-                  {about.role}
+              <div className="p-8 rounded-lg border border-cyan-400/30 bg-gradient-to-br from-[#1a1f3a] to-[#2a2f4a]">
+                <h3 className="text-2xl font-bold text-cyan-400 mb-4">Professional Summary</h3>
+                <p className="text-gray-300 leading-relaxed mb-4">
+                  SOC Analyst at CyboSec Technologies with hands-on experience in security operations, threat detection, and incident response. Actively pursuing bug bounties and security research to identify and responsibly disclose vulnerabilities.
                 </p>
-                <p className="text-gray-400 leading-relaxed">
-                  {about.bio}
+                <p className="text-gray-300 leading-relaxed mb-4">
+                  Specialized in SIEM/EDR/XDR platform operations, MITRE ATT&CK framework analysis, and threat intelligence. Passionate about learning emerging security technologies and contributing to the cybersecurity community.
+                </p>
+                <p className="text-gray-300 leading-relaxed">
+                  Throughout my internships at leading security firms, I've developed expertise in penetration testing, vulnerability assessment, and security automation. Committed to secure SDLC practices and proactive threat prevention.
                 </p>
               </div>
 
-              {/* Professional Experience */}
-              {experiences.length > 0 && (
-                <div className="space-y-4">
-                  <h4 className="text-xl font-bold text-white">Professional Experience</h4>
-                  {experiences.slice(0, 2).map((exp, idx) => (
-                    <div key={idx} className="glass rounded-lg p-4 hover:bg-opacity-20 transition-all">
-                      <p className="font-semibold text-indigo-400">{exp.role}</p>
-                      <p className="text-gray-400 text-sm">{exp.company} {exp.currentPosition ? '- Current' : ''}</p>
-                    </div>
-                  ))}
-                </div>
-              )}
+              {/* Quick Facts */}
+              <div className="grid grid-cols-2 gap-4">
+                {[
+                  { label: 'Current Role', value: 'SOC Analyst' },
+                  { label: 'Focus Areas', value: '5+ Security Domains' },
+                  { label: 'Top Skill', value: 'Incident Response' },
+                  { label: 'Approach', value: 'Proactive Defense' },
+                ].map((fact, idx) => (
+                  <motion.div
+                    key={idx}
+                    variants={itemVariants}
+                    className="p-4 rounded-lg bg-cyan-500/10 border border-cyan-400/30"
+                  >
+                    <p className="text-xs font-semibold text-cyan-400 uppercase tracking-wider mb-1">{fact.label}</p>
+                    <p className="text-white font-bold">{fact.value}</p>
+                  </motion.div>
+                ))}
+              </div>
             </motion.div>
 
-            {/* Right side - Stats */}
-            <motion.div variants={itemVariants} className="space-y-6">
-              {/* Quick stats */}
-              {[
-                {
-                  title: 'SPECIALIZATION',
-                  desc: 'MERN Stack Development',
-                  icon: '💻',
-                },
-                {
-                  title: 'FOCUS',
-                  desc: 'Building scalable, secure web applications',
-                  icon: '🎯',
-                },
-                {
-                  title: 'APPROACH',
-                  desc: 'Clean code, best practices, user-first design',
-                  icon: '⚡',
-                },
-                {
-                  title: 'PASSION',
-                  desc: 'Learning new technologies & solving complex problems',
-                  icon: '🚀',
-                },
-              ].map((stat, idx) => (
+            {/* Right side - Terminal */}
+            <motion.div variants={itemVariants}>
+              <Terminal />
+            </motion.div>
+          </div>
+
+          {/* Highlights grid */}
+          <motion.div
+            variants={containerVariants}
+            className="grid grid-cols-1 md:grid-cols-2 gap-6"
+          >
+            {highlights.map((highlight, idx) => {
+              const Icon = highlight.icon;
+              return (
                 <motion.div
                   key={idx}
                   variants={itemVariants}
-                  className="glass rounded-lg p-6 hover:bg-opacity-20 transition-all"
+                  className="p-6 rounded-lg border border-cyan-400/30 bg-gradient-to-br from-[#1a1f3a] to-[#2a2f4a] hover:border-cyan-400/60 hover:shadow-lg hover:shadow-cyan-500/20 transition-all duration-300 group"
                 >
-                  <div className="text-3xl mb-2">{stat.icon}</div>
-                  <p className="text-sm font-semibold text-indigo-400 mb-1">{stat.title}</p>
-                  <p className="text-gray-300">{stat.desc}</p>
+                  <div className="flex items-start gap-4">
+                    <div className="p-3 rounded-lg bg-cyan-500/20 text-cyan-400 group-hover:scale-110 transition-transform">
+                      <Icon className="w-6 h-6" />
+                    </div>
+                    <div className="flex-1">
+                      <h4 className="text-lg font-bold text-white mb-2 group-hover:text-cyan-400 transition-colors">
+                        {highlight.title}
+                      </h4>
+                      <p className="text-gray-300 text-sm leading-relaxed">{highlight.description}</p>
+                    </div>
+                  </div>
                 </motion.div>
-              ))}
-            </motion.div>
-          </div>
-            </>
-          ) : (
-            <div className="text-center py-12 text-gray-400">Unable to load about data</div>
-          )}
+              );
+            })}
+          </motion.div>
         </motion.div>
       </div>
     </section>

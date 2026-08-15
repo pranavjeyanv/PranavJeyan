@@ -1,6 +1,6 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { FiGithub, FiLinkedin, FiMail, FiArrowUp } from 'react-icons/fi';
+import { motion } from 'framer-motion';
+import { Github, Linkedin, Mail, ArrowUp, Shield } from 'lucide-react';
 
 const Footer = () => {
   const scrollToTop = () => {
@@ -9,95 +9,120 @@ const Footer = () => {
 
   const socialLinks = [
     {
-      icon: FiLinkedin,
-      url: 'https://www.linkedin.com/in/pranav-jeyan',
+      icon: Linkedin,
+      url: 'https://www.linkedin.com/in/pranavjeyanv/',
       label: 'LinkedIn',
     },
     {
-      icon: FiGithub,
-      url: 'https://github.com/pranavjeyan',
+      icon: Github,
+      url: 'https://github.com/pranavjeyanv',
       label: 'GitHub',
     },
     {
-      icon: FiMail,
-      url: 'mailto:pranavjeyan0@gmail.com',
+      icon: Mail,
+      url: 'mailto:pranavjeyanv@gmail.com',
       label: 'Email',
     },
   ];
 
   const quickLinks = [
-    { name: 'Home', href: '#home' },
+    { name: 'Home', href: '#hero' },
     { name: 'About', href: '#about' },
+    { name: 'Experience', href: '#experience' },
+    { name: 'Skills', href: '#skills' },
     { name: 'Projects', href: '#projects' },
     { name: 'Contact', href: '#contact' },
   ];
 
   return (
-    <footer className="bg-dark-light border-t border-gray-700">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+    <footer className="bg-gradient-to-b from-[#0a0e27] to-[#000000] border-t border-cyan-400/20">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          viewport={{ once: true }}
+          className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-12"
+        >
           {/* Brand */}
-          <div>
-            <h3 className="text-2xl font-bold gradient-text mb-4">Pranav Jeyan</h3>
-            <p className="text-gray-400 text-sm">
-              Full Stack Developer crafting beautiful and functional web experiences.
+          <motion.div whileHover={{ x: 5 }} className="space-y-4">
+            <div className="flex items-center gap-2">
+              <Shield className="w-8 h-8 text-cyan-400" />
+              <h3 className="text-2xl font-bold bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">
+                Pranav Jeyan V
+              </h3>
+            </div>
+            <p className="text-gray-400 text-sm leading-relaxed max-w-xs">
+              Cybersecurity professional specializing in SOC operations, penetration testing, and security research.
             </p>
-          </div>
+          </motion.div>
 
           {/* Quick Links */}
-          <div>
-            <h4 className="font-semibold text-white mb-4">Quick Links</h4>
+          <motion.div whileHover={{ x: 5 }}>
+            <h4 className="font-semibold text-white mb-4 text-lg">Quick Links</h4>
             <ul className="space-y-2">
               {quickLinks.map((link) => (
                 <li key={link.name}>
                   <a
                     href={link.href}
-                    className="text-gray-400 hover:text-indigo-400 transition-colors text-sm"
+                    className="text-gray-400 hover:text-cyan-400 transition-colors text-sm flex items-center gap-2 group"
                   >
+                    <span className="group-hover:translate-x-1 transition-transform">→</span>
                     {link.name}
                   </a>
                 </li>
               ))}
             </ul>
-          </div>
+          </motion.div>
 
           {/* Social Links */}
-          <div>
-            <h4 className="font-semibold text-white mb-4">Connect With Me</h4>
-            <div className="flex gap-4">
-              {socialLinks.map((social) => (
-                <a
-                  key={social.label}
-                  href={social.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-10 h-10 rounded-lg bg-glass hover:bg-indigo-500 hover:bg-opacity-30 flex items-center justify-center transition-all duration-300"
-                  title={social.label}
-                >
-                  <social.icon className="text-gray-300 hover:text-indigo-400" size={20} />
-                </a>
-              ))}
+          <motion.div whileHover={{ x: 5 }} className="space-y-4">
+            <h4 className="font-semibold text-white text-lg">Connect</h4>
+            <div className="flex gap-3 flex-wrap">
+              {socialLinks.map((social) => {
+                const Icon = social.icon;
+                return (
+                  <motion.a
+                    key={social.label}
+                    href={social.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="p-3 rounded-lg border border-cyan-400/30 text-cyan-400 hover:bg-cyan-500/10 hover:border-cyan-400/60 transition-all duration-300"
+                    whileHover={{ scale: 1.1, y: -2 }}
+                    whileTap={{ scale: 0.95 }}
+                    title={social.label}
+                  >
+                    <Icon className="w-5 h-5" />
+                  </motion.a>
+                );
+              })}
             </div>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
 
         {/* Divider */}
-        <div className="border-t border-gray-700 pt-8">
-          <div className="flex justify-center items-center relative">
-            <p className="text-gray-400 text-sm text-center">
-              © 2026 Pranav Jeyan V. All rights reserved.
+        <div className="border-t border-cyan-400/20 pt-8">
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            viewport={{ once: true }}
+            className="flex justify-center items-center relative"
+          >
+            <p className="text-gray-500 text-sm text-center absolute left-0 right-0">
+              © 2026 Pranav Jeyan V. All rights reserved. 
             </p>
-            <button
+            <motion.button
               onClick={scrollToTop}
-              className="w-10 h-10 rounded-lg bg-glass hover:bg-indigo-500 hover:bg-opacity-30 flex items-center justify-center transition-all duration-300 absolute right-0"
+              className="absolute right-0 p-3 rounded-lg border border-cyan-400/30 text-cyan-400 hover:bg-cyan-500/10 hover:border-cyan-400/60 transition-all duration-300"
+              whileHover={{ scale: 1.1, y: -2 }}
+              whileTap={{ scale: 0.95 }}
               title="Back to top"
             >
-              <FiArrowUp className="text-gray-300" size={20} />
-            </button>
-          </div>
+              <ArrowUp className="w-5 h-5" />
+            </motion.button>
+          </motion.div>
         </div>
-
-        
       </div>
     </footer>
   );

@@ -1,76 +1,21 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { FiGithub, FiExternalLink } from 'react-icons/fi';
-import { projectAPI } from '../services/api.js';
+import { projectsData, projectCategories } from '../data/projects';
+import { Github, ExternalLink } from 'lucide-react';
 
 const Projects = () => {
-  const [projects, setProjects] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [showAll, setShowAll] = useState(false);
-  const [imageErrors, setImageErrors] = useState({});
+  const [activeFilter, setActiveFilter] = useState('Security');
 
-  const defaultProjects = [
-    {
-      title: 'NovaCart',
-      description: 'E-commerce platform with advanced filtering and checkout system',
-      technologies: ['React', 'Node.js', 'MongoDB', 'Stripe'],
-      liveLink: 'https://nova-cart-client.vercel.app/',
-      githubLink: '#',
-      featured: true,
-    },
-    {
-      title: 'Note Maker',
-      description: 'Advanced note-taking application with real-time sync',
-      technologies: ['React', 'Firebase', 'Tailwind CSS'],
-      liveLink: 'https://note-maker-puce-three.vercel.app/',
-      githubLink: '#',
-      featured: true,
-    },
-    {
-      title: 'Task Management System',
-      description: 'Collaborative task management with drag-and-drop features',
-      technologies: ['React', 'Node.js', 'MongoDB', 'Socket.io'],
-      liveLink: 'https://task-alpha-ruby.vercel.app/',
-      githubLink: '#',
-      featured: false,
-    },
-    {
-      title: 'N13 Beauty Care',
-      description: 'Beauty products e-commerce website with portfolio showcase',
-      technologies: ['React', 'Express', 'MongoDB', 'Payment Gateway'],
-      liveLink: 'https://n13beautycare.com/',
-      githubLink: '#',
-      featured: false,
-    },
-  ];
-
-  useEffect(() => {
-    const fetchProjects = async () => {
-      try {
-        const response = await projectAPI.getProjects();
-        console.log('API Response:', response);
-        const data = response.data?.data || response.data || [];
-        console.log('Projects fetched:', data);
-        setProjects(data);
-      } catch (error) {
-        console.error('Error fetching projects:', error);
-        // Fallback to default projects
-        console.log('Using default projects');
-        setProjects(defaultProjects);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchProjects();
-  }, []);
+  const filteredProjects = activeFilter === 'All' 
+    ? projectsData 
+    : projectsData.filter(p => p.category.includes(activeFilter));
 
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.2,
+        staggerChildren: 0.1,
       },
     },
   };
@@ -80,114 +25,113 @@ const Projects = () => {
     visible: {
       opacity: 1,
       y: 0,
-      transition: { duration: 0.6 },
+      transition: { duration: 0.5 },
     },
   };
 
-  const getImageUrl = (image) => {
-    if (!image) return null;
-    // Handle both full URLs and relative paths
-    if (image.startsWith('http')) return image;
-    return `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/uploads/${image}`;
-  };
-
-  const handleImageError = (projectIdx) => {
-    setImageErrors(prev => ({ ...prev, [projectIdx]: true }));
-  };
-
   return (
-    <section id="projects" className="py-20 px-4 bg-dark-light/30">
-      <div className="max-w-7xl mx-auto">
+    <section id="projects" className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-[#0a0e27] to-[#1a1f3a]">
+      <div className="max-w-6xl mx-auto">
         <motion.div
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true, margin: '-100px' }}
+          viewport={{ once: true }}
         >
           {/* Section Title */}
-          <motion.div variants={itemVariants} className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold mb-4">
-              Featured <span className="gradient-text">Projects</span>
-            </h2>
-            <p className="text-gray-400 text-lg max-w-2xl mx-auto">
-              Explore my recent work and side projects
-            </p>
+          <motion.div variants={itemVariants} className="mb-16">
+            <h2 className="text-4xl sm:text-5xl font-bold text-white mb-4">Security Projects</h2>
+            <p className="text-cyan-400 text-lg">Security research and development initiatives</p>
           </motion.div>
 
+          
+
           {/* Projects Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {(projects.length > 0 ? projects : defaultProjects).map((project, idx) => (
+          <motion.div
+            variants={containerVariants}
+            className="grid grid-cols-1 md:grid-cols-2 gap-6"
+          >
+            {filteredProjects.map((project) => (
               <motion.div
-                key={idx}
+                key={project.id}
                 variants={itemVariants}
-                className="group glass rounded-xl overflow-hidden card-hover"
+                whileHover={{ y: -5 }}
+                className="p-6 rounded-lg border border-cyan-400/30 bg-gradient-to-br from-[#1a1f3a] to-[#2a2f4a] hover:border-cyan-400/60 hover:shadow-lg hover:shadow-cyan-500/20 transition-all duration-300 group flex flex-col"
               >
-                {/* Project Image */}
-                <div className="relative h-48 bg-gradient-to-br from-indigo-500/20 to-purple-600/20 overflow-hidden">
-                  {getImageUrl(project.image) && !imageErrors[idx] ? (
-                    <img
-                      src={getImageUrl(project.image)}
-                      alt={project.title}
-                      loading="lazy"
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
-                      onError={() => handleImageError(idx)}
-                    />
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-indigo-500/20 to-purple-600/20">
-                      <div className="text-gray-500 text-4xl">📱</div>
-                    </div>
-                  )}
+                {/* Header */}
+                <div className="mb-4">
+                  <h3 className="text-2xl font-bold text-white mb-2 group-hover:text-cyan-400 transition-colors">
+                    {project.title}
+                  </h3>
+                  <p className="text-gray-300 text-sm leading-relaxed">
+                    {project.description}
+                  </p>
                 </div>
 
-                {/* Content */}
-                <div className="p-6">
-                  <h3 className="text-2xl font-bold text-white mb-2">{project.title}</h3>
-                  <p className="text-gray-400 mb-4">{project.description}</p>
+                {/* Category badges */}
+                <div className="flex flex-wrap gap-2 mb-4">
+                  {project.category.map((cat, idx) => (
+                    <span
+                      key={idx}
+                      className="text-xs px-2 py-1 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-400/30"
+                    >
+                      {cat}
+                    </span>
+                  ))}
+                </div>
 
-                  {/* Technologies */}
-                  <div className="flex flex-wrap gap-2 mb-6">
-                    {project.technologies?.map((tech, techIdx) => (
+                {/* Technologies */}
+                <div className="mb-6">
+                  <p className="text-xs text-gray-500 font-semibold uppercase tracking-wider mb-2">Technologies</p>
+                  <div className="flex flex-wrap gap-2">
+                    {project.technologies.map((tech, idx) => (
                       <span
-                        key={techIdx}
-                        className="text-xs px-3 py-1 bg-indigo-500/20 border border-indigo-500/30 text-indigo-400 rounded-full"
+                        key={idx}
+                        className="text-xs px-3 py-1 rounded-full bg-blue-500/10 text-blue-300 border border-blue-400/30"
                       >
                         {tech}
                       </span>
                     ))}
                   </div>
+                </div>
 
-                  {/* Links */}
-                  <div className="flex gap-4">
-                    {project.liveLink && (
-                      <a
-                        href={project.liveLink}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex items-center gap-2 px-4 py-2 bg-indigo-500 hover:bg-indigo-600 text-white rounded-lg transition-colors"
-                      >
-                        <FiExternalLink size={16} />
-                        Live Demo
-                      </a>
-                    )}
-                    {project.githubLink && project.githubLink !== '#' && (
-                      <a
-                        href={project.githubLink}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex items-center gap-2 px-4 py-2 border border-indigo-500 text-indigo-400 hover:bg-indigo-500/10 rounded-lg transition-colors"
-                      >
-                        <FiGithub size={16} />
-                        GitHub
-                      </a>
-                    )}
-                  </div>
+                {/* Links */}
+                <div className="flex gap-3 mt-auto">
+                  {project.github && (
+                    <a
+                      href={project.github}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-cyan-400/40 text-cyan-400 hover:bg-cyan-500/10 hover:border-cyan-400/60 transition-all duration-300"
+                    >
+                      <Github className="w-4 h-4" />
+                      GitHub
+                    </a>
+                  )}
+                  {project.live && (
+                    <a
+                      href={project.live}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-gradient-to-r from-cyan-500 to-blue-500 text-white hover:shadow-lg hover:shadow-cyan-500/50 transition-all duration-300"
+                    >
+                      <ExternalLink className="w-4 h-4" />
+                      View
+                    </a>
+                  )}
                 </div>
               </motion.div>
             ))}
-          </div>
+          </motion.div>
 
-          {/* View All / View Less Button */}
-          {/* Hidden - View All button since we show all projects by default */}
+          {filteredProjects.length === 0 && (
+            <motion.div
+              variants={itemVariants}
+              className="text-center py-12 text-gray-400"
+            >
+              <p>No projects found in this category.</p>
+            </motion.div>
+          )}
         </motion.div>
       </div>
     </section>
