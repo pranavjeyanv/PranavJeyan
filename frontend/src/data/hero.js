@@ -1,5 +1,5 @@
 export const heroData = {
-  name: "Pranav Jeyan V",
+  name: "Pranav Jeyan",
   title: "Ethical Hacker | Cybersecurity Analyst | Security Researcher",
   tagline: "Protecting the digital frontier through comprehensive security research, penetration testing, and incident response.",
   description: "SOC Analyst with hands-on experience in threat detection, incident response, and security operations. Active security researcher and bug bounty hunter specializing in web application security and vulnerability assessment.",
