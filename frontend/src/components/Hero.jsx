@@ -37,8 +37,8 @@ const Hero = () => {
   return (
     <section id="hero" className="min-h-screen w-full bg-gradient-to-b from-[#0a0e27] via-[#1a1f3a] to-[#0a0e27] flex items-center justify-center overflow-hidden relative pt-20">
       {/* Animated grid background */}
-      <div className="absolute inset-0 opacity-20">
-        <div className="absolute inset-0" style={{
+      <div className="pointer-events-none absolute inset-0 opacity-20">
+        <div className="pointer-events-none absolute inset-0" style={{
           backgroundImage: 'radial-gradient(circle at 20% 50%, rgba(0, 255, 136, 0.1) 0%, transparent 50%), radial-gradient(circle at 80% 80%, rgba(0, 212, 255, 0.1) 0%, transparent 50%)',
           animation: 'pulse 20s ease-in-out infinite'
         }} />
