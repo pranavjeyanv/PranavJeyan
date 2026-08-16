@@ -116,8 +116,9 @@ const Navbar = () => {
       >
         <div className="px-4 py-4 space-y-2">
           {navLinks.map((link) => (
-            <motion.button
+            <motion.a
               key={link.id}
+              href={`#${link.id}`}
               onClick={() => handleNavClick(link.id)}
               className={`block w-full text-left px-4 py-2 rounded transition-all ${
                 activeSection === link.id
@@ -127,7 +128,7 @@ const Navbar = () => {
               whileHover={{ x: 4 }}
             >
               {link.label}
-            </motion.button>
+            </motion.a>
           ))}
         </div>
       </motion.div>
